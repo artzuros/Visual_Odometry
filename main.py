@@ -9,7 +9,7 @@ from kitti_poses import read_kitti_poses
 
 def run_kitti_analysis(sequence="01", image_index=1, method="ORB", verbose=False):
     # Load images
-    image_path = f"/home/artzuros/Documents/CS/kitti/data_odometry_gray/dataset/sequences/{sequence}/image_0/"
+    image_path = f"{DATASET}/sequences/{sequence}/image_0/"
     img1 = cv2.imread(f"{image_path}{image_index:06d}.png", cv2.IMREAD_GRAYSCALE)
     img2 = cv2.imread(f"{image_path}{image_index + 1:06d}.png", cv2.IMREAD_GRAYSCALE)
 
@@ -17,7 +17,7 @@ def run_kitti_analysis(sequence="01", image_index=1, method="ORB", verbose=False
         raise FileNotFoundError("One or both images could not be loaded. Check file paths.")
 
     # Load calibration data
-    K = read_calibration(f"/home/artzuros/Documents/CS/kitti/data_odometry_gray/dataset/sequences/{sequence}/calib.txt")
+    K = read_calibration(f"{DATASET}/sequences/{sequence}/calib.txt")
     
     if verbose:
         print("\n📌 Camera Intrinsic Matrix (K):\n", K)
@@ -37,7 +37,7 @@ def run_kitti_analysis(sequence="01", image_index=1, method="ORB", verbose=False
         print("\n📌 Estimated Translation Vector (t):\n", t)
 
     # Load KITTI ground truth poses
-    pose_file = f"/home/artzuros/Documents/CS/kitti/data_odometry_gray/dataset/poses/{sequence}.txt"
+    pose_file = f"{DATASET}/poses/{sequence}.txt"
     poses = read_kitti_poses(pose_file)
     R_gt, t_gt = poses[image_index + 1]
 
@@ -63,6 +63,7 @@ def run_kitti_analysis(sequence="01", image_index=1, method="ORB", verbose=False
     draw_epipolar_lines(img1, img2, F, pts1[:10], pts2[:10])
 
 if __name__ == "__main__":
+    DATASET = '/home/artzuros/Documents/CS/kitti/data_odometry_gray/dataset'
     parser = argparse.ArgumentParser(description="Run KITTI essential matrix and feature matching analysis.")
     parser.add_argument("--sequence", type=str, default="01", help="KITTI sequence number")
     parser.add_argument("--image_index", type=int, default=1, help="Index of the first image to use")
