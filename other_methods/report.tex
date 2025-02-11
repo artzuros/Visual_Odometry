@@ -1,0 +1,71 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+\title{Report on Methods for Visual Odometry Beyond Algorithmic Approaches}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Visual Odometry (VO) refers to the process of determining the position and orientation of a camera from a series of images or video frames. It plays a critical role in robotics, autonomous vehicles, and other computer vision applications. Traditionally, VO systems have followed an algorithmic pipeline, which involves several steps: feature extraction, feature matching, motion estimation, and scale recovery. However, with the rise of deep learning, new methods such as self-supervised learning have been explored to overcome the limitations of traditional systems. This report focuses on the supervised VO methods, their limitations, and the emergence of self-supervised learning techniques.
+
+\section{Supervised Methods for Visual Odometry}
+Supervised learning approaches to Visual Odometry typically rely on large datasets with ground-truth poses to train models. These methods often use deep learning techniques such as Convolutional Neural Networks (CNNs) for feature extraction and regression to directly predict the camera's motion from a sequence of images. The models are trained using pairs of images and their corresponding ground-truth poses, enabling the system to learn the mapping between visual inputs and camera motion.
+
+\subsection{Supervised Learning in VO}
+In supervised VO, a model is trained to predict camera poses from an image sequence, using labeled data to supervise the learning process. The model can be trained using both image and pose pairs, and typically leverages CNNs to extract features from images, followed by additional networks (e.g., fully connected layers or RNNs) to predict the pose. Supervised approaches have shown good performance in various tasks, as they can be optimized for accuracy using well-labeled datasets.
+
+\subsection{Issues with Supervised Methods}
+While supervised methods provide high accuracy, they are not without limitations. Some of the key issues are as follows:
+
+\begin{itemize}
+    \item \textbf{Dependency on Large Labeled Datasets:} Supervised VO systems require a large number of training samples with precise ground-truth poses. Acquiring these labeled datasets can be expensive and time-consuming, especially for real-world scenarios where it is difficult to annotate every image with accurate pose data.
+    \item \textbf{Overfitting to Specific Environments:} Since supervised methods are trained on specific datasets, they may struggle to generalize to new or unseen environments. The model learns features that are often tied to the conditions of the training data, making it less robust to variations such as changes in lighting, texture, or scene structure.
+    \item \textbf{Inability to Handle Occlusions:} Supervised VO methods rely on the assumption that the camera motion is smooth and continuous. However, in the presence of occlusions (e.g., moving objects or obstacles), these models may fail to estimate poses correctly.
+    \item \textbf{Calibration and Scale Issues:} Supervised methods often rely on the assumption that the camera is calibrated and the scale is known. In monocular VO, recovering the absolute scale can be particularly challenging, and any inaccuracies in this regard lead to drift over time.
+\end{itemize}
+
+Despite these issues, supervised methods still play an important role in VO, especially when high-quality labeled datasets are available. However, the limitations associated with these methods have led researchers to explore alternative approaches, such as self-supervised learning.
+
+\section{Self-Supervised Methods for Visual Odometry}
+Self-supervised learning has emerged as a promising alternative to supervised learning, especially in situations where labeled data is scarce or difficult to obtain. In self-supervised VO, the model learns to predict poses and depth information without requiring explicit ground-truth labels. Instead, the model uses the inherent structure of the visual data itself for supervision, which typically involves using the temporal consistency of image sequences.
+
+\subsection{Monocular Depth Estimation and Pose Estimation}
+Self-supervised methods typically rely on video sequences or stereo images to estimate both depth and camera motion. The idea is to train a model to predict depth maps and pose transformations between consecutive frames by minimizing a reconstruction error, such as the difference between the input image and the reprojected image.
+
+\subsection{Advantages of Self-Supervised Methods}
+Self-supervised methods address several of the issues that supervised methods face:
+
+\begin{itemize}
+    \item \textbf{No Need for Labeled Data:} The key advantage of self-supervised VO is that it does not require ground-truth poses or depth labels. This makes it much easier to scale the system, as large datasets can be generated from unlabeled video data or stereo pairs.
+    \item \textbf{Better Generalization:} Since self-supervised learning does not rely on specific labeled environments, models trained using this approach are generally more robust and can generalize better to new and unseen scenarios.
+    \item \textbf{Handling Occlusions and Motion:} Self-supervised methods are better equipped to deal with issues like occlusions and motion artifacts. For instance, in monocular video training, models can leverage temporal consistency between frames to learn more about object motion and camera movement.
+    \item \textbf{Scale Invariance in Monocular Systems:} Some self-supervised systems, such as Monodepth2, are capable of learning scale-invariant representations from monocular video, which mitigates the challenges of recovering absolute scale in traditional monocular VO.
+\end{itemize}
+
+\subsection{Key Contributions and Techniques}
+Recent advancements in self-supervised VO, such as **Monodepth2**, have introduced several innovative techniques to further improve performance:
+
+\begin{itemize}
+    \item \textbf{Multi-Scale Sampling:} Self-supervised models can use multi-scale sampling to minimize artifacts and enhance the quality of depth predictions, especially for distant objects.
+    \item \textbf{Reprojection Loss and Auto-Masking:} A reprojection loss is used to reduce errors due to occlusions and motion. Auto-masking allows the model to ignore pixels where camera motion assumptions are violated, improving robustness in challenging environments.
+    \item \textbf{Handling Moving Objects:} Moving objects, which often cause difficulties in monocular VO, can be better modeled in self-supervised methods, improving the accuracy of depth and motion estimates in dynamic scenes.
+\end{itemize}
+
+\section{References}
+\begin{itemize}
+% write this  https://arxiv.org/pdf/1709.08429
+\item \textbf{1.} https://arxiv.org/pdf/1806.01260 : DeepVO: Towards End-to-End Visual Odometry with Deep Recurrent Convolutional Neural Networks
+
+\item \textbf{2.} https://arxiv.org/pdf/1806.01260 : Digging Into Self-Supervised Monocular Depth Estimation
+% \section{Conclusion}
+% While supervised methods for Visual Odometry have proven to be effective in environments with abundant labeled data, they face several challenges, including the need for large datasets, difficulty generalizing to new environments, and issues with scale and occlusions. Self-supervised methods, on the other hand, offer a promising alternative by eliminating the need for labeled data and providing a more robust solution to these challenges. The continued development of self-supervised learning techniques is likely to advance the field of visual odometry, making it more scalable and adaptable to real-world applications.
+\end{itemize}
+
+
+
+\end{document}
