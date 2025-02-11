@@ -10,9 +10,13 @@ This project processes KITTI odometry dataset images to compute the Essential Ma
 - Decomposes the Essential Matrix to obtain rotation and translation.
 - Compares results with KITTI ground truth poses.
 - Supports `SIFT`and `ORB` feature matching.
-<!-- - Visualizes epipolar lines. -->
+<!-- - Visualizes epipolar lines. 
+
+
+-->
 - Includes a Streamlit web app for interactive analysis.
 
+https://github.com/user-attachments/assets/ad6a59ac-78d0-49ae-be59-df4ad62065b9
 
 ## 🔧 Installation
 ### Prerequisites
