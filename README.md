@@ -84,6 +84,8 @@ python main.py --sequence 01 --image_index 1 --method ORB
  ┃ ┃ ┃ ┣ 📜 calib.txt       ┃
  ┃ ┣ 📂 poses               ┃
  ┃ ┃ ┣ 📜 01.txt            ┃
+ ┃ ┣ 📂 other_methods
+ ┃ ┃ ┣ 📜 report.pdf
  ┣ 📜 main.py
  ┣ 📜 calibration.py
  ┣ 📜 feature_matching.py
@@ -92,6 +94,8 @@ python main.py --sequence 01 --image_index 1 --method ORB
  ┣ 📜 README.md
  ┣ 📜 requirements.txt 
  ┣ 📜 streamlit_app_DEMO.mp4
+ ┣ 📜 Visual-Odometry-Beyond_Algotithmic-Approaches.pptx
+ 
 ```
 ## 📌 TODO
 - Check for ever-increasing error on sequence 01 
