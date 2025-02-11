@@ -1,0 +1,156 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, graphicx}
+
+\title{Understanding Feature Matching, Essential Matrix, and Epipolar Geometry}
+% \author{Your Name}
+% \date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+% This document explains the step-by-step process of:/
+\begin{itemize}
+    \item Finding feature correspondences using SIFT and ORB
+    \item Computing the fundamental and essential matrices
+    \item Decomposing the essential matrix to find camera motion
+    \item Visualizing epipolar lines
+\end{itemize}
+
+\section{Feature Matching: Finding Correspondences}
+To estimate the relationship between two images, we first need to find corresponding points between them.
+
+\subsection{SIFT (Scale-Invariant Feature Transform)}
+SIFT is a feature detection algorithm that finds keypoints in an image based on differences in scale and orientation.
+
+\begin{enumerate}
+    \item Convert the image to grayscale.
+    \item Generate a scale space by progressively blurring the image.
+    \item Use the Difference of Gaussians (DoG) to detect keypoints.
+    \item Assign an orientation to each keypoint.
+    \item Compute a descriptor by considering gradient orientations around the keypoint.
+    \item Match keypoints between images using the Euclidean distance of their descriptors.
+\end{enumerate}
+
+The descriptor for a keypoint is represented as a 128-dimensional vector.
+
+\subsection{ORB (Oriented FAST and Rotated BRIEF)}
+ORB is a faster alternative to SIFT and is based on binary descriptors.
+
+\begin{enumerate}
+    \item Detect keypoints using the FAST corner detector.
+    \item Assign an orientation using the intensity centroid method.
+    \item Compute binary descriptors using the BRIEF (Binary Robust Independent Elementary Features) method.
+    \item Match features using the Hamming distance instead of Euclidean distance.
+\end{enumerate}
+
+\section{Fundamental Matrix: Finding the Relationship Between Two Views}
+The fundamental matrix \( F \) represents the relationship between two images by encoding how points in one image correspond to points in the other.
+
+\subsection{Mathematical Definition}
+The fundamental matrix satisfies the equation:
+
+\begin{equation}
+    \mathbf{x'}^T F \mathbf{x} = 0
+\end{equation}
+
+where:
+\begin{itemize}
+    \item \( \mathbf{x} \) is a point in the first image.
+    \item \( \mathbf{x'} \) is the corresponding point in the second image.
+    \item \( F \) is a \( 3 \times 3 \) matrix that encodes the relationship.
+\end{itemize}
+
+\subsection{Computing the Fundamental Matrix}
+To compute \( F \), we use the Eight-Point Algorithm:
+
+\begin{enumerate}
+    \item Normalize the point coordinates.
+    \item Construct a matrix \( A \) using the correspondences:
+    \begin{equation}
+        A = 
+        \begin{bmatrix}
+            x_1' x_1 & x_1' y_1 & x_1' & y_1' x_1 & y_1' y_1 & y_1' & x_1 & y_1 & 1 \\
+            x_2' x_2 & x_2' y_2 & x_2' & y_2' x_2 & y_2' y_2 & y_2' & x_2 & y_2 & 1 \\
+            \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+        \end{bmatrix}
+    \end{equation}
+    \item Compute the singular value decomposition (SVD) of \( A \), keeping only the smallest singular value.
+    \item Ensure \( F \) has rank 2 by forcing the smallest singular value to be zero.
+\end{enumerate}
+
+\section{Essential Matrix: Incorporating Camera Calibration}
+The essential matrix \( E \) is similar to the fundamental matrix but incorporates the camera’s intrinsic parameters.
+
+\begin{equation}
+    E = K^T F K
+\end{equation}
+
+where \( K \) is the camera intrinsic matrix containing focal length and optical center.
+
+\subsection{Computing the Essential Matrix}
+To compute \( E \):
+
+\begin{enumerate}
+    \item Compute the fundamental matrix \( F \).
+    \item Multiply by the intrinsic camera matrix \( K \):
+    \begin{equation}
+        E = K^T F K
+    \end{equation}
+    \item Ensure \( E \) has rank 2 by forcing one singular value to be zero.
+\end{enumerate}
+
+\section{Decomposing the Essential Matrix: Extracting Rotation and Translation}
+The essential matrix can be decomposed to extract the rotation and translation between two camera views.
+
+\subsection{Using Singular Value Decomposition (SVD)}
+We perform SVD on \( E \):
+
+\begin{equation}
+    E = U \Sigma V^T
+\end{equation}
+
+where \( U \) and \( V \) are orthogonal matrices and \( \Sigma \) contains singular values.
+
+\subsection{Extracting Rotation and Translation}
+From SVD, the two possible rotation matrices are:
+
+\begin{equation}
+    R_1 = U W V^T, \quad R_2 = U W^T V^T
+\end{equation}
+
+where:
+
+\begin{equation}
+    W = \begin{bmatrix} 0 & -1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 1 \end{bmatrix}
+\end{equation}
+
+The translation vector is extracted as:
+
+\begin{equation}
+    t = U[:, 3]
+\end{equation}
+
+\section{Epipolar Geometry: Visualizing the Correspondence}
+\subsection{Epipolar Lines}
+Once we have \( F \), we can draw epipolar lines, which are the possible locations where a point in one image appears in the other.
+
+\begin{equation}
+    \text{epipolar line} = F \mathbf{x}
+\end{equation}
+
+where \( \mathbf{x} \) is a point in one image.
+
+\section{Conclusion}
+In this document, we covered:
+\begin{itemize}
+    \item How to find corresponding points using SIFT and ORB
+    \item How to compute the fundamental and essential matrices
+    \item How to extract rotation and translation from the essential matrix
+    \item How to visualize epipolar geometry
+\end{itemize}
+
+These concepts are fundamental for 3D reconstruction, visual odometry, and structure-from-motion tasks.
+
+\end{document}
